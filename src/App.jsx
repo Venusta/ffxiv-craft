@@ -1,214 +1,115 @@
+/* eslint-disable react/no-array-index-key */
+/* eslint-disable no-shadow */
+/* eslint-disable max-len */
+/* eslint-disable no-unused-vars */
 /* eslint-disable arrow-body-style */
 /* eslint-disable no-console */
 import React from "react";
+import {
+  Simulation,
+  RapidSynthesis,
+  CrafterStats,
+  MuscleMemory,
+  InnerQuiet,
+  PrudentTouch,
+  PreparatoryTouch,
+  Manipulation,
+  Veneration,
+  WasteNotII,
+  CraftingJob,
+  BasicTouch,
+  GreatStrides,
+  Innovation,
+  ByregotsBlessing,
+  PatientTouch,
+  Reflect,
+  MastersMend,
+  BasicSynthesis,
+} from "@ffxiv-teamcraft/simulator";
 
-const App = () => <h1>Hello, world.</h1>;
-
-const testRotation = [
-  [
-    "Manipulation",
-    "Great Strides",
-    "Innovation",
-    "Preparatory Touch",
-    "Great Strides",
-    "Preparatory Touch",
-    "Great Strides",
-    "Innovation",
-    "Preparatory Touch",
-    "Preparatory Touch",
-    "Preparatory Touch",
-    "Great Strides",
-    "Byregot's Blessing",
-    "Great Strides",
-    "Standard Synthesis",
-    "None",
-    "None",
-    "None",
-    "None",
-    "None",
-    "None"],
-];
-
-const skills = {
-  manip: "Manipulation",
-  innovation: "Innovation",
-  greatStrides: "Great Strides",
-  prepTouch: "Preparatory Touch",
-  prudentTouch: "Prudent Touch",
-  basicTouch: "Basic Touch",
-  standardTouch: "Standard Touch",
-  observe: "Observe",
-  focusedTouch: "Focused Touch",
-  byregotsBlessing: "Byregot's Blessing",
-  standardSynthesis: "Standard Synthesis",
-  none: "None",
+const recipe = {
+  id: "9999",
+  job: CraftingJob.ANY,
+  rlvl: 481,
+  durability: 60,
+  quality: 64862,
+  progress: 9181,
+  lvl: 80,
+  suggestedCraftsmanship: 2484,
+  suggestedControl: 2206,
+  stars: 3,
+  hq: 1,
+  quickSynth: 0,
+  controlReq: 2480,
+  craftsmanshipReq: 2195,
+  unlockId: 0,
+  // ingredients: [],
+  yield: 1,
+  expert: true,
 };
 
-const types = {
-  touch: "Touch",
-  synthesis: "Synthesis",
-};
+const crafterLevels = [80, 80, 80, 80, 80, 80, 80, 80];
+const crafterStats = new CrafterStats(0, 2560, 2517 + 64, 700, true, 80, crafterLevels);
+const iq2 = new InnerQuiet();
+const rotation = new Simulation(recipe, [
+  new Reflect(),
+  new PatientTouch(),
+  new PatientTouch(),
+  new PatientTouch(),
+  new MastersMend(),
 
-const abilities = {
-  Innovation: {
-    name: skills.innovation,
-    CP: 18,
-    durability: 0,
-    multi: 0.5,
-    duration: 4,
-  },
-  "Basic Touch": {
-    CP: 18,
-    durability: 10,
-    multi: 1,
-    type: types.touch,
-  },
-  "Standard Touch": {
-    CP: 32,
-    durability: 10,
-    multi: 1.25,
-    type: types.touch,
-  },
-
-  "Preparatory Touch": {
-    CP: 40,
-    durability: 20,
-    multi: 2,
-    type: types.touch,
-  },
-
-  "Prudent Touch": {
-    CP: 25,
-    durability: 5,
-    multi: 1,
-    type: types.touch,
-  },
-
-  Observe: {
-    CP: 7,
-    durability: 0,
-    multi: 0,
-  },
-
-  "Focused Touch": {
-    CP: 18,
-    durability: 10,
-    multi: 1.5,
-    type: types.touch,
-  },
-
-  "Great Strides": {
-    name: skills.greatStrides,
-    CP: 32,
-    durability: 0,
-    multi: 1,
-    duration: 3,
-  },
-
-  "Byregot's Blessing": {
-    CP: 24,
-    durability: 10,
-    multi: 3,
-    type: types.touch,
-  },
-
-  "Standard Synthesis": {
-    CP: 0,
-    durability: 10,
-    multi: 1,
-    type: types.synthesis,
-  },
-
-  Manipulation: {
-    name: skills.manip,
-    CP: 96,
-    durability: -40,
-    multi: 0,
-    duration: 8,
-  },
-
-  None: {
-    CP: 0,
-    durability: 0,
-    multi: 0,
-    name: skills.none,
-  },
-};
+  new Manipulation(),
+  new GreatStrides(),
+  new Innovation(),
+  new PreparatoryTouch(),
+  new GreatStrides(),
+  new PreparatoryTouch(),
+  new GreatStrides(),
+  new Innovation(),
+  new PreparatoryTouch(),
+  new GreatStrides(),
+  new ByregotsBlessing(),
+  new BasicSynthesis(),
+], crafterStats, undefined, undefined, -20000);
 
 
-const calcCP = ([rotation]) => {
-  return rotation.reduce((result, current) => {
-    return result + abilities[current].CP;
-  }, 0);
-};
+console.log(rotation.buffs);
+console.log("-------------");
 
-const calcDurability = ([rotation]) => {
-  const preDura = rotation.reduce((result, current) => {
-    return result + abilities[current].durability;
-  }, 0);
-  return preDura + (preDura % 10 === 0 ? -9 : -4);
-};
+const result = rotation.run(true);
+console.log(rotation.buffs);
+const reliabilityReport = rotation.getReliabilityReport();
 
-const activeBuff = (currentAbility, buffStatus, buffName) => {
-  let { active, duration } = buffStatus;
+// console.log(simulation.getHQPercent());
+console.log(rotation);
+console.log(result);
+// console.log(reliabilityReport);
 
-  if (active && duration > 0) {
-    duration -= 1;
-  }
-
-  if (duration === 0) {
-    active = false;
-  }
-
-  if (currentAbility === buffName) {
-    active = true;
-    duration = abilities[currentAbility].duration;
-  }
-
-  return { active, duration };
-};
-
-const calcQuality = ([rotation]) => {
-  const {
-    Innovation, None, "Great Strides": GS, Manipulation,
-  } = abilities;
-
-  let gsBuff = {
-    duration: 0,
-    active: false,
-  };
-
-  let inBuff = {
-    duration: 0,
-    active: false,
-  };
-
-  let manipBuff = {
-    duration: 0,
-    active: false,
-  };
-
-  return rotation.reduce((result, current) => {
-    console.log(`   Ability used: ${current}`);
-    if (current === None.name) return result;
-
-    manipBuff = activeBuff(current, manipBuff, Manipulation.name);
-
-    inBuff = activeBuff(current, inBuff, Innovation.name);
-
-    gsBuff = activeBuff(current, gsBuff, GS.name);
-    if (gsBuff.active && abilities[current].type === types.touch) { // touch used, reset
-      gsBuff.duration = 0;
-      gsBuff.active = false;
+const App = () => {
+  let cp = 0;
+  let dura = recipe.durability;
+  let quality = 0;
+  const x = result.steps.map((step, index) => {
+    if (index > 4) { // skip the finisher setup
+      dura += step.solidityDifference;
+      dura += step.afterBuffTick.solidityDifference;
+      cp -= step.cpDifference;
+      quality += step.addedQuality;
+      return <li key={index}>{`${step.action.constructor.name} - Q: ${step.addedQuality} - P: ${step.addedProgression} CP: ${step.cpDifference} Dura: ${step.solidityDifference} Dura+Buff: ${step.solidityDifference + step.afterBuffTick.solidityDifference}`}</li>;
     }
-    console.log(`Manip: ${manipBuff.active} ${manipBuff.duration} - GS: ${gsBuff.active} ${gsBuff.duration} - In: ${inBuff.active} ${inBuff.duration}`);
+    return null;
+  });
+  // console.log(x);
 
-    return result + abilities[current].durability;
-  }, 0);
+  return (
+    <div>
+      <h2>{`CP: ${cp}, Dura: ${recipe.durability - dura}, Quality Needed: ${recipe.quality - quality}, Quality Gain: ${quality}`}</h2>
+      <ol>
+        {x}
+      </ol>
+    </div>
+  );
 };
 
-console.log(calcQuality(testRotation));
-console.log(calcCP(testRotation));
-console.log(calcDurability(testRotation));
 
 export default App;
