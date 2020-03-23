@@ -56,7 +56,7 @@ const rotation = new Simulation(recipe, [
   new PatientTouch(),
   new PatientTouch(),
   new PatientTouch(),
-  new MastersMend(),
+  new MastersMend(), // get 11iq stacks and restore some dura :|
 
   new Manipulation(),
   new GreatStrides(),
@@ -72,15 +72,12 @@ const rotation = new Simulation(recipe, [
   new BasicSynthesis(),
 ], crafterStats, undefined, undefined, -20000);
 
-
 console.log(rotation.buffs);
 console.log("------------");
 
 const result = rotation.run(true);
-console.log(rotation.buffs);
 const reliabilityReport = rotation.getReliabilityReport();
 
-// console.log(simulation.getHQPercent());
 console.log(rotation);
 console.log(result);
 // console.log(reliabilityReport);
@@ -89,7 +86,7 @@ const App = () => {
   let cp = 0;
   let dura = recipe.durability;
   let quality = 0;
-  const x = result.steps.map((step, index) => {
+  const x = result.steps.map((step, index) => { // GROSS AF
     if (index > 4) { // skip the finisher setup
       dura += step.solidityDifference;
       dura += step.afterBuffTick.solidityDifference;
