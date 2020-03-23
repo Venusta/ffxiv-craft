@@ -74,7 +74,7 @@ const rotation = new Simulation(recipe, [
 
 
 console.log(rotation.buffs);
-console.log("-------------");
+console.log("------------");
 
 const result = rotation.run(true);
 console.log(rotation.buffs);
