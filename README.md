@@ -1,1 +1,1 @@
-# react-boilerplate
+# Expert craft stuff
