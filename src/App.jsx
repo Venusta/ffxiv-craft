@@ -1,5 +1,4 @@
 /* eslint-disable react/no-array-index-key */
-/* eslint-disable no-shadow */
 /* eslint-disable max-len */
 /* eslint-disable no-unused-vars */
 /* eslint-disable arrow-body-style */
@@ -43,7 +42,6 @@ const recipe = {
   controlReq: 2480,
   craftsmanshipReq: 2195,
   unlockId: 0,
-  // ingredients: [],
   yield: 1,
   expert: true,
 };
@@ -82,7 +80,8 @@ const App = () => {
   let cp = 0;
   let dura = recipe.durability;
   let quality = 0;
-  const x = result.steps.map((step, index) => { // GROSS AF
+
+  const listItems = result.steps.map((step, index) => { // GROSS AF
     if (index >= opener.length) { // skip the opener
       dura += step.solidityDifference;
       dura += step.afterBuffTick.solidityDifference;
@@ -98,7 +97,7 @@ const App = () => {
     <div>
       <h2>{`CP: ${cp}, Dura Needed: ${recipe.durability - dura}, Quality Needed: ${recipe.quality - quality}, Quality Gain: ${quality}`}</h2>
       <ol>
-        {x}
+        {listItems}
       </ol>
     </div>
   );
