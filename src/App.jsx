@@ -24,6 +24,7 @@ import {
   Reflect,
   MastersMend,
   BasicSynthesis,
+  Buff,
 } from "@ffxiv-teamcraft/simulator";
 
 const recipe = {
@@ -47,11 +48,8 @@ const recipe = {
 };
 
 const crafterLevels = [80, 80, 80, 80, 80, 80, 80, 80];
-const crafterStats = new CrafterStats(0, 2560, 2517 + 64, 700, true, 80, crafterLevels);
-const opener = [new Reflect(), new PatientTouch(), new PatientTouch(), new PatientTouch(), new MastersMend()];
+const crafterStats = new CrafterStats(0, 2560, 2517 + 64, 553, true, 80, crafterLevels);
 const rotation = new Simulation(recipe, [
-  ...opener, // get 11iq stacks and restore some dura :|
-
   new Manipulation(),
   new GreatStrides(),
   new Innovation(),
@@ -64,15 +62,16 @@ const rotation = new Simulation(recipe, [
   new GreatStrides(),
   new ByregotsBlessing(),
   new BasicSynthesis(),
-], crafterStats, undefined, undefined, -20000);
+], crafterStats, undefined, undefined, 0);
 
-console.log(rotation.buffs);
-console.log("------------");
+rotation.buffs.push({
+  duration: Infinity, stacks: 11, buff: Buff.INNER_QUIET, appliedStep: 0,
+});
 
-const result = rotation.run(true);
-const reliabilityReport = rotation.getReliabilityReport();
+rotation.progression = recipe.progress - 1;
+const result = rotation.run();
 
-console.log(rotation);
+// console.log(rotation);
 console.log(result);
 // console.log(reliabilityReport);
 
@@ -82,16 +81,12 @@ const App = () => {
   let quality = 0;
 
   const listItems = result.steps.map((step, index) => { // GROSS AF
-    if (index >= opener.length) { // skip the opener
-      dura += step.solidityDifference;
-      dura += step.afterBuffTick.solidityDifference;
-      cp -= step.cpDifference;
-      quality += step.addedQuality;
-      return <li key={index}>{`${step.action.constructor.name} - Q: ${step.addedQuality} - P: ${step.addedProgression} CP: ${step.cpDifference} Dura: ${step.solidityDifference} Dura+Buff: ${step.solidityDifference + step.afterBuffTick.solidityDifference}`}</li>;
-    }
-    return null;
+    dura += step.solidityDifference;
+    dura += step.afterBuffTick.solidityDifference;
+    cp -= step.cpDifference;
+    quality += step.addedQuality;
+    return <li key={index}>{`${step.action.constructor.name} - Q: ${step.addedQuality} - P: ${step.addedProgression} CP: ${step.cpDifference} Dura: ${step.solidityDifference} Dura+Buff: ${step.solidityDifference + step.afterBuffTick.solidityDifference}`}</li>;
   });
-  // console.log(x);
 
   return (
     <div>
