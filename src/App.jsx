@@ -50,13 +50,9 @@ const recipe = {
 
 const crafterLevels = [80, 80, 80, 80, 80, 80, 80, 80];
 const crafterStats = new CrafterStats(0, 2560, 2517 + 64, 700, true, 80, crafterLevels);
-const iq2 = new InnerQuiet();
+const opener = [new Reflect(), new PatientTouch(), new PatientTouch(), new PatientTouch(), new MastersMend()];
 const rotation = new Simulation(recipe, [
-  new Reflect(),
-  new PatientTouch(),
-  new PatientTouch(),
-  new PatientTouch(),
-  new MastersMend(), // get 11iq stacks and restore some dura :|
+  ...opener, // get 11iq stacks and restore some dura :|
 
   new Manipulation(),
   new GreatStrides(),
@@ -87,7 +83,7 @@ const App = () => {
   let dura = recipe.durability;
   let quality = 0;
   const x = result.steps.map((step, index) => { // GROSS AF
-    if (index > 4) { // skip the finisher setup
+    if (index >= opener.length) { // skip the opener
       dura += step.solidityDifference;
       dura += step.afterBuffTick.solidityDifference;
       cp -= step.cpDifference;
@@ -100,7 +96,7 @@ const App = () => {
 
   return (
     <div>
-      <h2>{`CP: ${cp}, Dura: ${recipe.durability - dura}, Quality Needed: ${recipe.quality - quality}, Quality Gain: ${quality}`}</h2>
+      <h2>{`CP: ${cp}, Dura Needed: ${recipe.durability - dura}, Quality Needed: ${recipe.quality - quality}, Quality Gain: ${quality}`}</h2>
       <ol>
         {x}
       </ol>
