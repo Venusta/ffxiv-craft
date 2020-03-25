@@ -95,12 +95,31 @@ const finisher331 = [
   ...finisherSegment2,
 ];
 
+const obsFoc = [
+  new Observe(),
+  new FocusedTouch(),
+];
+
+const finisher231 = [
+  new GreatStrides(),
+  new Innovation(),
+  new Observe(),
+  new FocusedTouch(),
+  new Observe(),
+  new FocusedTouch(),
+  new GreatStrides(),
+  new Innovation(),
+  new Observe(),
+  new FocusedTouch(),
+  new GreatStrides(),
+  new ByregotsBlessing(),
+];
+
 const finisher74 = [
   new Innovation(),
   new GreatStrides(),
   new ByregotsBlessing(),
 ];
-
 
 const testFinisher1 = [
   new Innovation(),
@@ -114,6 +133,14 @@ const testFinisher2 = [
   new GreatStrides(),
   new ByregotsBlessing(),
 ];
+const testFinisher3 = [
+  new Innovation(),
+  new Observe(),
+  new FocusedTouch(),
+  new GreatStrides(),
+  new ByregotsBlessing(),
+];
+
 
 const rotation = (stats, finisher) => {
   const {
@@ -128,12 +155,12 @@ const rotation = (stats, finisher) => {
     duration: Infinity, stacks: 11, buff: Buff.INNER_QUIET, appliedStep: 0,
   });
 
-  sim.durability = expertRecipe.durability - 15;
+  sim.durability = expertRecipe.durability - 0;
   sim.progression = expertRecipe.progress - 1;
   return sim.run();
 };
 
-const result = rotation(statData.ltw, testFinisher1);
+const result = rotation(statData.ltw, finisher231);
 
 // console.log(rotation);
 console.log(result);
